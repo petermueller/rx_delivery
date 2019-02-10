@@ -40,6 +40,27 @@ defmodule RxDelivery.Pharmacies do
   @doc """
   Creates a pharmacy.
 
+  Raises an `Ecto` namespaced error if there's an error creating the Pharmacy.
+
+  ## Examples
+
+      iex> create_pharmacy!(%{name: "ABC Pharmacy"})
+      {:ok, %Pharmacy{}}
+
+      iex> create_pharmacy(%{name: 123})
+      ** (Ecto.InvalidChangesetError)
+
+  """
+  def create_pharmacy!(attrs \\ %{}) do
+    %Pharmacy{}
+    |> Pharmacy.changeset(attrs)
+    |> Repo.insert!()
+  end
+
+  @doc """
+  Similar to `create_pharmacy!/1`
+  but returns an error-tuple instead of raising an error
+
   ## Examples
 
       iex> create_pharmacy(%{field: value})

@@ -13,6 +13,7 @@ defmodule RxDelivery.Pharmacies.Pharmacy do
   def changeset(pharmacy, attrs) do
     pharmacy
     |> cast(attrs, [:name])
-    |> validate_required([:name])
+    |> validate_required(:name)
+    |> unique_constraint(:name)
   end
 end
