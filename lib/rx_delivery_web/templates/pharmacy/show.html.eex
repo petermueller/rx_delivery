@@ -1,0 +1,13 @@
+<h1>Show Pharmacy</h1>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @pharmacy.name %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.pharmacy_path(@conn, :edit, @pharmacy) %></span>
+<span><%= link "Back", to: Routes.pharmacy_path(@conn, :index) %></span>
