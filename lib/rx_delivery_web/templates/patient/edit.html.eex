@@ -1,0 +1,5 @@
+<h1>Edit Patient</h1>
+
+<%= render "form.html", Map.put(assigns, :action, Routes.patient_path(@conn, :update, @patient)) %>
+
+<span><%= link "Back", to: Routes.patient_path(@conn, :index) %></span>
