@@ -12,7 +12,13 @@
 alias RxDelivery.Pharmacies
 
 [
-  %{name: "Alfa Pharmacy"},
-  %{name: "Bravo Pharmacy"},
+  {%{name: "Alfa Pharmacy"},  %{latitude: "39.9612", longitude: "82.9988"}},
+  {%{name: "Bravo Pharmacy"}, %{latitude: "40.9612", longitude: "72.9988"}},
 ]
-|> Enum.each(&Pharmacies.create_pharmacy!/1)
+|> Enum.map(fn {ph, loc} ->
+  pharmacy = Pharmacies.create_pharmacy!(ph)
+
+  loc
+  |> Map.put(:pharmacy_id, pharmacy.id)
+  |> Pharmacies.create_location!()
+end)

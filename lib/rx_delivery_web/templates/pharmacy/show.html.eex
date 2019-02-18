@@ -1,10 +1,10 @@
-<h1>Show Pharmacy</h1>
+<h5>Pharmacy</h5>
+<h1><%= @pharmacy.name %></h1>
 
 <ul>
 
   <li>
-    <strong>Name:</strong>
-    <%= @pharmacy.name %>
+    <strong><%= link "Location", to: Routes.pharmacy_location_path(@conn, :show, @pharmacy) %></strong>
   </li>
 
 </ul>

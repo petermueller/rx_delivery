@@ -5,6 +5,7 @@ defmodule RxDelivery.Pharmacies.Pharmacy do
 
   schema "pharmacies" do
     field :name, :string
+    has_one :location, RxDelivery.Pharmacies.Location
 
     timestamps()
   end
