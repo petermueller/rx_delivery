@@ -40,6 +40,28 @@ defmodule RxDelivery.Patients do
   @doc """
   Creates a patient.
 
+  Raises an `Ecto` namespaced error if there's an error creating the Patient.
+
+  ## Examples
+
+      iex> create_patient!(%{field: value})
+      %Patient{}
+
+      iex> create_patient!(%{field: bad_value})
+      ** (Ecto.InvalidChangesetError)
+
+  """
+  def create_patient!(attrs \\ %{}) do
+    %Patient{}
+    |> Patient.changeset(attrs)
+    |> Repo.insert!()
+  end
+
+  @doc """
+  Similar to `create_patient!/1`
+  but returns an error-tuple instead of raising an error
+  and an ok-tuple with the record instead of just the record
+
   ## Examples
 
       iex> create_patient(%{field: value})
