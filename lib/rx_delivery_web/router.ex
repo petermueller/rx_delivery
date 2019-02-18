@@ -20,6 +20,7 @@ defmodule RxDeliveryWeb.Router do
     resources "/pharmacies", PharmacyController do
       resources "/location", LocationController, singleton: true
     end
+    resources "/orders", OrderController
     resources "/patients", PatientController
     resources "/prescriptions", PrescriptionController
   end
