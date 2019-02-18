@@ -40,6 +40,28 @@ defmodule RxDelivery.Prescriptions do
   @doc """
   Creates a prescription.
 
+  Raises an `Ecto` namespaced error if there's an error creating the Prescription.
+
+  ## Examples
+
+      iex> create_prescription!(%{field: value})
+      %Prescription{}}
+
+      iex> create_prescription!(%{field: bad_value})
+      ** (Ecto.InvalidChangesetError)
+
+  """
+  def create_prescription!(attrs \\ %{}) do
+    %Prescription{}
+    |> Prescription.changeset(attrs)
+    |> Repo.insert!()
+  end
+
+  @doc """
+  Similar to `create_prescription!/1`
+  but returns an error-tuple instead of raising an error
+  and an ok-tuple with the record instead of just the record
+
   ## Examples
 
       iex> create_prescription(%{field: value})
