@@ -10,6 +10,7 @@
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
 alias RxDelivery.Pharmacies
+alias RxDelivery.Prescriptions
 
 [
   {%{name: "Alfa Pharmacy"},  %{latitude: "39.9612", longitude: "82.9988"}},
@@ -22,3 +23,10 @@ alias RxDelivery.Pharmacies
   |> Map.put(:pharmacy_id, pharmacy.id)
   |> Pharmacies.create_location!()
 end)
+
+
+[
+  %{name: "Allegra"},
+  %{name: "Rolaids"},
+]
+|> Enum.map(&Prescriptions.create_prescription!/1)

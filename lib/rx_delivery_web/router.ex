@@ -20,6 +20,7 @@ defmodule RxDeliveryWeb.Router do
     resources "/pharmacies", PharmacyController do
       resources "/location", LocationController, singleton: true
     end
+    resources "/prescriptions", PrescriptionController
   end
 
   # Other scopes may use custom stacks.

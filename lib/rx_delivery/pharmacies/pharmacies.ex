@@ -73,6 +73,7 @@ defmodule RxDelivery.Pharmacies do
   @doc """
   Similar to `create_pharmacy!/1`
   but returns an error-tuple instead of raising an error
+  and an ok-tuple with the record instead of just the record
 
   ## Examples
 
