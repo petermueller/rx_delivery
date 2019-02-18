@@ -17,7 +17,9 @@ defmodule RxDeliveryWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
-    resources "/pharmacies", PharmacyController
+    resources "/pharmacies", PharmacyController do
+      resources "/location", LocationController, singleton: true
+    end
   end
 
   # Other scopes may use custom stacks.

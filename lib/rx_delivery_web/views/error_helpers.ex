@@ -15,8 +15,20 @@ defmodule RxDeliveryWeb.ErrorHelpers do
   end
 
   @doc """
+  Generate an error tag for every error. Mostly for debugging.
+  """
+  def all_errors_tag(form) do
+    Enum.map(form.errors, fn {field, error} ->
+      content_tag(:span, (translate_error(field, error)), class: "help-block")
+    end)
+  end
+
+  @doc """
   Translates an error message using gettext.
   """
+  def translate_error(field, error) when is_atom(field) do
+    "#{Atom.to_string(field)} #{translate_error(error)}"
+  end
   def translate_error({msg, opts}) do
     # When using gettext, we typically pass the strings we want
     # to translate as a static argument:
