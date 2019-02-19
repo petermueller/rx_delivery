@@ -156,7 +156,27 @@ defmodule RxDelivery.Patients do
   def get_order!(id), do: Repo.get!(Order, id)
 
   @doc """
-  Creates a order.
+  Creates an order.
+
+  ## Examples
+
+      iex> create_order!(%{field: value})
+      %Order{}}
+
+      iex> create_order!(%{field: bad_value})
+      ** (Ecto.InvalidChangesetError)
+
+  """
+  def create_order!(attrs \\ %{}) do
+    %Order{}
+    |> Order.changeset(attrs)
+    |> Repo.insert!()
+  end
+
+  @doc """
+  Similar to `create_order!/1`
+  but returns an error-tuple instead of raising an error
+  and an ok-tuple with the record instead of just the record
 
   ## Examples
 
@@ -174,7 +194,7 @@ defmodule RxDelivery.Patients do
   end
 
   @doc """
-  Updates a order.
+  Updates an order.
 
   ## Examples
 
@@ -192,7 +212,7 @@ defmodule RxDelivery.Patients do
   end
 
   @doc """
-  Deletes a Order.
+  Deletes an Order.
 
   ## Examples
 
