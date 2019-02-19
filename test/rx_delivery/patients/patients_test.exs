@@ -2,6 +2,10 @@ defmodule RxDelivery.PatientsTest do
   use RxDelivery.DataCase
 
   alias RxDelivery.Patients
+  alias RxDelivery.Prescriptions
+  alias RxDelivery.Pharmacies
+
+  alias RxDelivery.Fixtures
 
   describe "patients" do
     alias RxDelivery.Patients.Patient
@@ -67,18 +71,13 @@ defmodule RxDelivery.PatientsTest do
   describe "orders" do
     alias RxDelivery.Patients.Order
 
-    @valid_attrs %{}
-    @update_attrs %{}
-    @invalid_attrs %{}
+    @invalid_attrs %{
+      patient_id:      10_000,
+      prescription_id: 10_000,
+      location_id:     10_000,
+    }
 
-    def order_fixture(attrs \\ %{}) do
-      {:ok, order} =
-        attrs
-        |> Enum.into(@valid_attrs)
-        |> Patients.create_order()
-
-      order
-    end
+    def order_fixture(attrs \\ Fixtures.order_attrs()), do: Patients.create_order!(attrs)
 
     test "list_orders/0 returns all orders" do
       order = order_fixture()
@@ -91,7 +90,11 @@ defmodule RxDelivery.PatientsTest do
     end
 
     test "create_order/1 with valid data creates a order" do
-      assert {:ok, %Order{} = order} = Patients.create_order(@valid_attrs)
+      assert {:ok, %Order{} = order} = Patients.create_order(Fixtures.order_attrs())
+    end
+
+    test "create_order!/1 with invalid data returns error changeset" do
+      assert_raise Ecto.InvalidChangesetError, fn -> Patients.create_order!(@invalid_attrs) end
     end
 
     test "create_order/1 with invalid data returns error changeset" do
@@ -100,7 +103,11 @@ defmodule RxDelivery.PatientsTest do
 
     test "update_order/2 with valid data updates the order" do
       order = order_fixture()
-      assert {:ok, %Order{} = order} = Patients.update_order(order, @update_attrs)
+      updated_order_attrs =
+        Fixtures.order_attrs(
+          %{location_attrs: %{pharmacy_id: Fixtures.updated_pharmacy().id}}
+        )
+      assert {:ok, %Order{} = order} = Patients.update_order(order, updated_order_attrs)
     end
 
     test "update_order/2 with invalid data returns error changeset" do

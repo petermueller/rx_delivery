@@ -1,14 +1,16 @@
 defmodule RxDeliveryWeb.OrderControllerTest do
   use RxDeliveryWeb.ConnCase
 
-  alias RxDelivery.Patients
+  alias RxDelivery.{Fixtures, Patients}
 
-  @create_attrs %{}
-  @update_attrs %{}
-  @invalid_attrs %{}
+  @invalid_attrs %{
+    patient_id:      10_000,
+    prescription_id: 10_000,
+    location_id:     10_000,
+  }
 
   def fixture(:order) do
-    {:ok, order} = Patients.create_order(@create_attrs)
+    {:ok, order} = Patients.create_order(Fixtures.order_attrs())
     order
   end
 
@@ -28,7 +30,7 @@ defmodule RxDeliveryWeb.OrderControllerTest do
 
   describe "create order" do
     test "redirects to show when data is valid", %{conn: conn} do
-      conn = post(conn, Routes.order_path(conn, :create), order: @create_attrs)
+      conn = post(conn, Routes.order_path(conn, :create), order: Fixtures.order_attrs())
 
       assert %{id: id} = redirected_params(conn)
       assert redirected_to(conn) == Routes.order_path(conn, :show, id)
@@ -56,7 +58,11 @@ defmodule RxDeliveryWeb.OrderControllerTest do
     setup [:create_order]
 
     test "redirects when data is valid", %{conn: conn, order: order} do
-      conn = put(conn, Routes.order_path(conn, :update, order), order: @update_attrs)
+      updated_order_attrs =
+        Fixtures.order_attrs(
+          %{location_attrs: %{pharmacy_id: Fixtures.updated_pharmacy().id}}
+        )
+      conn = put(conn, Routes.order_path(conn, :update, order), order: updated_order_attrs)
       assert redirected_to(conn) == Routes.order_path(conn, :show, order)
 
       conn = get(conn, Routes.order_path(conn, :show, order))
