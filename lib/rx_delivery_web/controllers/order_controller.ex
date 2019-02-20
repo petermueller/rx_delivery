@@ -5,7 +5,7 @@ defmodule RxDeliveryWeb.OrderController do
   alias RxDelivery.Patients.Order
 
   def index(conn, _params) do
-    orders = Patients.list_orders()
+    orders = Patients.list_orders(:with_assocs)
     render(conn, "index.html", orders: orders)
   end
 
@@ -27,7 +27,7 @@ defmodule RxDeliveryWeb.OrderController do
   end
 
   def show(conn, %{"id" => id}) do
-    order = Patients.get_order!(id)
+    order = Patients.get_order!(id, :with_assocs)
     render(conn, "show.html", order: order)
   end
 

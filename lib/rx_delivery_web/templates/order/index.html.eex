@@ -3,6 +3,7 @@
 <table>
   <thead>
     <tr>
+      <th>Order Info</th>
 
       <th></th>
     </tr>
@@ -11,6 +12,7 @@
 <%= for order <- @orders do %>
     <tr>
 
+      <td><%= basic_order_info(order) %></td>
       <td>
         <%= link "Show", to: Routes.order_path(@conn, :show, order) %>
         <%= link "Edit", to: Routes.order_path(@conn, :edit, order) %>

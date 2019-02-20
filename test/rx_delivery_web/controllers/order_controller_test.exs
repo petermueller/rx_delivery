@@ -15,9 +15,12 @@ defmodule RxDeliveryWeb.OrderControllerTest do
   end
 
   describe "index" do
-    test "lists all orders", %{conn: conn} do
+    setup [:create_order]
+    test "lists all orders", %{conn: conn, order: order} do
+      %{first_name: first_name, last_name: last_name} = Patients.get_patient!(order.patient_id)
       conn = get(conn, Routes.order_path(conn, :index))
       assert html_response(conn, 200) =~ "Listing Orders"
+      assert html_response(conn, 200) =~ first_name <> " " <> last_name
     end
   end
 
@@ -36,12 +39,28 @@ defmodule RxDeliveryWeb.OrderControllerTest do
       assert redirected_to(conn) == Routes.order_path(conn, :show, id)
 
       conn = get(conn, Routes.order_path(conn, :show, id))
-      assert html_response(conn, 200) =~ "Show Order"
+      assert html_response(conn, 200) =~ "Order Information"
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
       conn = post(conn, Routes.order_path(conn, :create), order: @invalid_attrs)
       assert html_response(conn, 200) =~ "New Order"
+    end
+  end
+
+  describe "show order" do
+    setup [:create_order]
+
+    test "renders information about the order", %{conn: conn, order: order} do
+      order = Patients.get_order!(order.id, :with_assocs)
+      %{first_name: "Bob" = first_name, last_name: last_name} = order.patient
+      %{name: prescription_name} = order.prescription
+      expected_info = "Prescription: #{prescription_name} for #{first_name} #{last_name}"
+
+
+      conn = get(conn, Routes.order_path(conn, :show, order.id))
+      assert html_response(conn, 200) =~ "Order Information"
+      assert html_response(conn, 200) =~ expected_info
     end
   end
 

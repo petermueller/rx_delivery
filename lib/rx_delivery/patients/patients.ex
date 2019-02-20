@@ -138,6 +138,9 @@ defmodule RxDelivery.Patients do
   def list_orders do
     Repo.all(Order)
   end
+  def list_orders(:with_assocs) do
+    Repo.all(order_with_assocs_query())
+  end
 
   @doc """
   Gets a single order.
@@ -154,6 +157,8 @@ defmodule RxDelivery.Patients do
 
   """
   def get_order!(id), do: Repo.get!(Order, id)
+
+  def get_order!(id, :with_assocs), do: Repo.get!(order_with_assocs_query(), id)
 
   @doc """
   Creates an order.
@@ -238,5 +243,9 @@ defmodule RxDelivery.Patients do
   """
   def change_order(%Order{} = order) do
     Order.changeset(order, %{})
+  end
+
+  defp order_with_assocs_query do
+    from o in Order, preload: [:location, :patient, :prescription]
   end
 end
