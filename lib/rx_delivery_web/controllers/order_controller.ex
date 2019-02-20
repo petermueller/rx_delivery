@@ -1,7 +1,7 @@
 defmodule RxDeliveryWeb.OrderController do
   use RxDeliveryWeb, :controller
 
-  alias RxDelivery.Patients
+  alias RxDelivery.{Patients, Pharmacies, Prescriptions}
   alias RxDelivery.Patients.Order
 
   def index(conn, _params) do
@@ -11,7 +11,7 @@ defmodule RxDeliveryWeb.OrderController do
 
   def new(conn, _params) do
     changeset = Patients.change_order(%Order{})
-    render(conn, "new.html", changeset: changeset)
+    render_with_all_assocs_assigned(conn, "new.html", changeset: changeset)
   end
 
   def create(conn, %{"order" => order_params}) do
@@ -22,7 +22,7 @@ defmodule RxDeliveryWeb.OrderController do
         |> redirect(to: Routes.order_path(conn, :show, order))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
+        render_with_all_assocs_assigned(conn, "new.html", changeset: changeset)
     end
   end
 
@@ -34,7 +34,7 @@ defmodule RxDeliveryWeb.OrderController do
   def edit(conn, %{"id" => id}) do
     order = Patients.get_order!(id)
     changeset = Patients.change_order(order)
-    render(conn, "edit.html", order: order, changeset: changeset)
+    render_with_all_assocs_assigned(conn, "edit.html", order: order, changeset: changeset)
   end
 
   def update(conn, %{"id" => id, "order" => order_params}) do
@@ -47,7 +47,7 @@ defmodule RxDeliveryWeb.OrderController do
         |> redirect(to: Routes.order_path(conn, :show, order))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", order: order, changeset: changeset)
+        render_with_all_assocs_assigned(conn, "edit.html", order: order, changeset: changeset)
     end
   end
 
@@ -58,5 +58,15 @@ defmodule RxDeliveryWeb.OrderController do
     conn
     |> put_flash(:info, "Order deleted successfully.")
     |> redirect(to: Routes.order_path(conn, :index))
+  end
+
+  def render_with_all_assocs_assigned(conn, action_or_template, rest) do
+    rest =
+      rest
+      |> Keyword.put_new_lazy(:patients, &Patients.list_patients/0)
+      |> Keyword.put_new_lazy(:prescriptions, &Prescriptions.list_prescriptions/0)
+      |> Keyword.put_new_lazy(:pharmacies, fn -> Pharmacies.list_pharmacies(with: :location) end)
+
+    render(conn, action_or_template, rest)
   end
 end

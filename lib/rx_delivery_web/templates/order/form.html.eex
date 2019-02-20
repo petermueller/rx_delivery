@@ -5,6 +5,18 @@
     </div>
   <% end %>
 
+  <%= label f, :patient_id %>
+  <%= select f, :patient_id, format_list_for_select_tag(@patients) %>
+  <%= error_tag f, :patient_id %>
+
+  <%= label f, :prescription_id %>
+  <%= select f, :prescription_id, format_list_for_select_tag(@prescriptions) %>
+  <%= error_tag f, :prescription_id %>
+
+  <%= label f, :location_id %>
+  <%= select f, :location_id, format_list_for_select_tag(@pharmacies) %>
+  <%= error_tag f, :location_id %>
+
   <div>
     <%= submit "Save" %>
   </div>

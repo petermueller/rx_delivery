@@ -68,8 +68,12 @@ defmodule RxDeliveryWeb.OrderControllerTest do
     setup [:create_order]
 
     test "renders form for editing chosen order", %{conn: conn, order: order} do
+      order = Patients.get_order!(order.id, :with_assocs)
+      %{first_name: "Bob" = first_name, last_name: last_name} = order.patient
+
       conn = get(conn, Routes.order_path(conn, :edit, order))
       assert html_response(conn, 200) =~ "Edit Order"
+      assert html_response(conn, 200) =~ first_name <> " " <> last_name
     end
   end
 
