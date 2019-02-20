@@ -20,6 +20,9 @@ defmodule RxDelivery.Pharmacies do
   def list_pharmacies do
     Repo.all(Pharmacy)
   end
+  def list_pharmacies(with: :location) do
+    Repo.all(pharmacies_with_assocs_query())
+  end
 
   @doc """
   Gets a single pharmacy.
@@ -37,17 +40,13 @@ defmodule RxDelivery.Pharmacies do
   """
   def get_pharmacy!(id), do: Repo.get!(Pharmacy, id)
   def get_pharmacy!(id, with: :location) do
-    query = from ph in Pharmacy,
-    preload: [:location]
-    Repo.get!(query, id)
+    Repo.get!(pharmacies_with_assocs_query(), id)
   end
 
 
   def get_pharmacy(id), do: Repo.get(Pharmacy, id)
   def get_pharmacy(id, with: :location) do
-    query = from ph in Pharmacy,
-    preload: [:location]
-    Repo.get(query, id)
+    Repo.get(pharmacies_with_assocs_query(), id)
   end
 
   @doc """
@@ -135,6 +134,10 @@ defmodule RxDelivery.Pharmacies do
   """
   def change_pharmacy(%Pharmacy{} = pharmacy) do
     Pharmacy.changeset(pharmacy, %{})
+  end
+
+  defp pharmacies_with_assocs_query do
+    from ph in Pharmacy, preload: [:location]
   end
 
   alias RxDelivery.Pharmacies.Location
