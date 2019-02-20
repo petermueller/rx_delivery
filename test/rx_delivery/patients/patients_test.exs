@@ -2,8 +2,6 @@ defmodule RxDelivery.PatientsTest do
   use RxDelivery.DataCase
 
   alias RxDelivery.Patients
-  alias RxDelivery.Prescriptions
-  alias RxDelivery.Pharmacies
 
   alias RxDelivery.Fixtures
 

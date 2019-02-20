@@ -2,7 +2,6 @@ defmodule RxDeliveryWeb.LocationControllerTest do
   use RxDeliveryWeb.ConnCase
 
   alias RxDelivery.Pharmacies
-  alias RxDelivery.Repo
 
   @pharmacy_attrs %{name: "Butt Drugs, Inc."}
   @create_attrs %{latitude: "some latitude", longitude: "some longitude"}
