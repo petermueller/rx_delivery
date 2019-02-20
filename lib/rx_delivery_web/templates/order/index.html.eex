@@ -1,0 +1,26 @@
+<h1>Listing Orders</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Order Info</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for order <- @orders do %>
+    <tr>
+
+      <td><%= basic_order_info(order) %></td>
+      <td>
+        <%= link "Show", to: Routes.order_path(@conn, :show, order) %>
+        <%= link "Edit", to: Routes.order_path(@conn, :edit, order) %>
+        <%= link "Delete", to: Routes.order_path(@conn, :delete, order), method: :delete, data: [confirm: "Are you sure?"] %>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Order", to: Routes.order_path(@conn, :new) %></span>

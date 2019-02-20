@@ -1,0 +1,9 @@
+<h5>Order Information</h5>
+<h1><%= verbose_order_info(@order) %></h1>
+
+<ul>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.order_path(@conn, :edit, @order) %></span>
+<span><%= link "Back", to: Routes.order_path(@conn, :index) %></span>

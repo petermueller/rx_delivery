@@ -3,6 +3,8 @@ defmodule RxDelivery.PatientsTest do
 
   alias RxDelivery.Patients
 
+  alias RxDelivery.Fixtures
+
   describe "patients" do
     alias RxDelivery.Patients.Patient
 
@@ -61,6 +63,66 @@ defmodule RxDelivery.PatientsTest do
     test "change_patient/1 returns a patient changeset" do
       patient = patient_fixture()
       assert %Ecto.Changeset{} = Patients.change_patient(patient)
+    end
+  end
+
+  describe "orders" do
+    alias RxDelivery.Patients.Order
+
+    @invalid_attrs %{
+      patient_id:      10_000,
+      prescription_id: 10_000,
+      location_id:     10_000,
+    }
+
+    def order_fixture(attrs \\ Fixtures.order_attrs()), do: Patients.create_order!(attrs)
+
+    test "list_orders/0 returns all orders" do
+      order = order_fixture()
+      assert Patients.list_orders() == [order]
+    end
+
+    test "get_order!/1 returns the order with given id" do
+      order = order_fixture()
+      assert Patients.get_order!(order.id) == order
+    end
+
+    test "create_order/1 with valid data creates a order" do
+      assert {:ok, %Order{} = order} = Patients.create_order(Fixtures.order_attrs())
+    end
+
+    test "create_order!/1 with invalid data returns error changeset" do
+      assert_raise Ecto.InvalidChangesetError, fn -> Patients.create_order!(@invalid_attrs) end
+    end
+
+    test "create_order/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Patients.create_order(@invalid_attrs)
+    end
+
+    test "update_order/2 with valid data updates the order" do
+      order = order_fixture()
+      updated_order_attrs =
+        Fixtures.order_attrs(
+          %{location_attrs: %{pharmacy_id: Fixtures.updated_pharmacy().id}}
+        )
+      assert {:ok, %Order{} = order} = Patients.update_order(order, updated_order_attrs)
+    end
+
+    test "update_order/2 with invalid data returns error changeset" do
+      order = order_fixture()
+      assert {:error, %Ecto.Changeset{}} = Patients.update_order(order, @invalid_attrs)
+      assert order == Patients.get_order!(order.id)
+    end
+
+    test "delete_order/1 deletes the order" do
+      order = order_fixture()
+      assert {:ok, %Order{}} = Patients.delete_order(order)
+      assert_raise Ecto.NoResultsError, fn -> Patients.get_order!(order.id) end
+    end
+
+    test "change_order/1 returns a order changeset" do
+      order = order_fixture()
+      assert %Ecto.Changeset{} = Patients.change_order(order)
     end
   end
 end
