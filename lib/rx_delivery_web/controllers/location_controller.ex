@@ -1,5 +1,3 @@
-require IO
-
 defmodule RxDeliveryWeb.LocationController do
   use RxDeliveryWeb, :controller
 
@@ -7,6 +5,7 @@ defmodule RxDeliveryWeb.LocationController do
   alias RxDelivery.Pharmacies.Location
 
   plug :set_pharmacy_assigns
+  plug :authorize_current_pharmacy
 
   # Actions
 
@@ -90,6 +89,25 @@ defmodule RxDeliveryWeb.LocationController do
       nil -> render_not_found(conn)
       pharmacy -> assign(conn, :pharmacy, pharmacy)
     end
+  end
+
+  defp authorize_current_pharmacy(conn, _) do
+    if is_authorized_for_action?(conn, action_name(conn)) do
+      conn
+    else
+      conn
+      |> put_flash(:error, "Forbidden")
+      |> redirect(to: Routes.pharmacy_path(conn, :show, Auth.current_pharmacy(conn)))
+      |> halt()
+    end
+  end
+
+  defp is_authorized_for_action?(_conn, :show), do: true
+  defp is_authorized_for_action?(conn, _action) do
+    %{id: current_pharmacy_id} = Auth.current_pharmacy(conn)
+    %{id: pharmacy_id} = conn.assigns.pharmacy
+
+    current_pharmacy_id == pharmacy_id
   end
 
   defp redirect_to_new_location(conn, message) do

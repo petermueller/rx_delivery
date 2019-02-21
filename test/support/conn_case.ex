@@ -26,6 +26,14 @@ defmodule RxDeliveryWeb.ConnCase do
     end
   end
 
+  @default_opts [
+      store: :cookie,
+      key: "secretkey",
+      encryption_salt: "encrypted cookie salt",
+      signing_salt: "signing salt",
+    ]
+  @signing_opts Plug.Session.init(Keyword.put(@default_opts, :encrypt, false))
+
   setup tags do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(RxDelivery.Repo)
 
@@ -33,6 +41,19 @@ defmodule RxDeliveryWeb.ConnCase do
       Ecto.Adapters.SQL.Sandbox.mode(RxDelivery.Repo, {:shared, self()})
     end
 
-    {:ok, conn: Phoenix.ConnTest.build_conn()}
+
+    {conn, pharmacy} = if tags[:authenticated_pharmacy] do
+      pharmacy = RxDelivery.Fixtures.pharmacy()
+      conn =
+        Phoenix.ConnTest.build_conn()
+        |> Plug.Session.call(@signing_opts)
+        |> Plug.Conn.fetch_session()
+        |> RxDeliveryWeb.Helpers.Auth.signin!(pharmacy)
+      {conn, pharmacy}
+    else
+      {Phoenix.ConnTest.build_conn(), nil}
+    end
+
+    {:ok, conn: conn, pharmacy: pharmacy}
   end
 end

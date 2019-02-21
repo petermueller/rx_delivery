@@ -1,12 +1,16 @@
 defmodule RxDeliveryWeb.Router do
   use RxDeliveryWeb, :router
 
+  import RxDeliveryWeb.Helpers.Auth,
+    only: [load_current_pharmacy: 2]
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug :load_current_pharmacy
   end
 
   pipeline :api do
@@ -17,7 +21,13 @@ defmodule RxDeliveryWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
-    resources "/pharmacies", PharmacyController do
+
+    get "/sign-in", SessionController, :new
+    post "/sign-in", SessionController, :create
+    delete "/sign-out", SessionController, :delete
+
+    resources "/registrations", PharmacyController, only: [:new, :create]
+    resources "/pharmacies", PharmacyController, only: [:index, :show] do
       resources "/location", LocationController, singleton: true
     end
     resources "/orders", OrderController

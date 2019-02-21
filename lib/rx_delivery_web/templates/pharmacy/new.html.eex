@@ -1,5 +1,3 @@
-<h1>New Pharmacy</h1>
+<h1>Sign Up with your Pharmacy's Information</h1>
 
 <%= render "form.html", Map.put(assigns, :action, Routes.pharmacy_path(@conn, :create)) %>
-
-<span><%= link "Back", to: Routes.pharmacy_path(@conn, :index) %></span>

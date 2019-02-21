@@ -3,10 +3,18 @@ defmodule RxDelivery.Fixtures do
 
   @location_attrs %{latitude: "some latitude", longitude: "some longitude"}
   @patient_attrs %{first_name: "Bob", last_name: "Dobbs"}
-  @pharmacy_attrs %{name: "Butt Drugs, Inc."}
+  @pharmacy_attrs %{
+    name: "Butt Drugs, Inc.",
+    username: "buttdrugs",
+    encrypted_password: "password!"
+  }
   @prescription_attrs %{name: "Apple Flavoring, liquid"}
 
-  @updated_pharmacy_attrs %{name: "Not Just A Dispensary, LLC."}
+  @updated_pharmacy_attrs %{
+    name: "Not Just A Dispensary, LLC.",
+    username: "notbuttdrugs",
+    encrypted_password: "updatedpw"
+  }
   @combined_attrs %{
     location_attrs: @location_attrs,
     patient_attrs: @patient_attrs,

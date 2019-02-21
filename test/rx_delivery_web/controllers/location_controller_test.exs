@@ -1,14 +1,16 @@
 defmodule RxDeliveryWeb.LocationControllerTest do
   use RxDeliveryWeb.ConnCase
 
+  alias RxDelivery.Fixtures
+
   alias RxDelivery.Pharmacies
 
-  @pharmacy_attrs %{name: "Butt Drugs, Inc."}
   @create_attrs %{latitude: "some latitude", longitude: "some longitude"}
   @update_attrs %{latitude: "some updated latitude", longitude: "some updated longitude"}
   @invalid_attrs %{latitude: nil, longitude: nil}
 
-  def fixture(:pharmacy), do: Pharmacies.create_pharmacy!(@pharmacy_attrs)
+  @moduletag :authenticated_pharmacy
+
   def fixture(:location, pharmacy) do
     @create_attrs
     |> Map.put(:pharmacy_id, pharmacy.id)
@@ -16,14 +18,13 @@ defmodule RxDeliveryWeb.LocationControllerTest do
   end
 
   describe "without a pharmacy" do
-    test "redirects to pharmacy index", %{conn: conn} do
+    test "renders a Not Found page", %{conn: conn} do
       conn = get(conn, Routes.pharmacy_location_path(conn, :show, 10_000))
       assert html_response(conn, 404)
     end
   end
 
   describe "new location" do
-    setup [:create_pharmacy]
 
     test "renders form", %{conn: conn, pharmacy: pharmacy} do
       conn = get(conn, Routes.pharmacy_location_path(conn, :new, pharmacy))
@@ -32,7 +33,6 @@ defmodule RxDeliveryWeb.LocationControllerTest do
   end
 
   describe "create location" do
-    setup [:create_pharmacy]
 
     test "redirects to show when data is valid", %{conn: conn, pharmacy: pharmacy} do
       conn = post(conn, Routes.pharmacy_location_path(conn, :create, pharmacy), location: @create_attrs)
@@ -49,7 +49,7 @@ defmodule RxDeliveryWeb.LocationControllerTest do
   end
 
   describe "edit location" do
-    setup [:create_pharmacy, :with_location]
+    setup [:with_location]
 
     test "renders form for editing chosen location", %{conn: conn, pharmacy: pharmacy} do
       conn = get(conn, Routes.pharmacy_location_path(conn, :edit, pharmacy))
@@ -57,8 +57,17 @@ defmodule RxDeliveryWeb.LocationControllerTest do
     end
   end
 
+  describe "edit location of another pharmacy" do
+    setup [:other_pharmacy, :with_location]
+
+    test "redirects back to the auth'd pharmacy", %{conn: conn, pharmacy: pharmacy, other_pharmacy: other_pharmacy} do
+      conn = get(conn, Routes.pharmacy_location_path(conn, :edit, other_pharmacy))
+      assert redirected_to(conn) == Routes.pharmacy_path(conn, :show, pharmacy)
+    end
+  end
+
   describe "update location" do
-    setup [:create_pharmacy, :with_location]
+    setup [:with_location]
 
     test "redirects when data is valid", %{conn: conn, pharmacy: pharmacy} do
       conn = put(conn, Routes.pharmacy_location_path(conn, :update, pharmacy), location: @update_attrs)
@@ -75,7 +84,7 @@ defmodule RxDeliveryWeb.LocationControllerTest do
   end
 
   describe "delete location" do
-    setup [:create_pharmacy, :with_location]
+    setup [:with_location]
 
     test "deletes chosen location", %{conn: conn, pharmacy: pharmacy} do
       conn = delete(conn, Routes.pharmacy_location_path(conn, :delete, pharmacy))
@@ -86,7 +95,7 @@ defmodule RxDeliveryWeb.LocationControllerTest do
     end
   end
 
-  defp create_pharmacy(_), do: {:ok, pharmacy: fixture(:pharmacy)}
+  defp other_pharmacy(_), do: {:ok, other_pharmacy: Fixtures.updated_pharmacy()}
 
   defp with_location(%{pharmacy: pharmacy}), do: {:ok, location: fixture(:location, pharmacy)}
 end

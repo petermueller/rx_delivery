@@ -6,9 +6,21 @@ defmodule RxDelivery.PharmaciesTest do
   describe "pharmacies" do
     alias RxDelivery.Pharmacies.Pharmacy
 
-    @valid_attrs %{name: "some name"}
-    @update_attrs %{name: "some updated name"}
-    @invalid_attrs %{name: nil}
+    @valid_attrs %{
+      name: "some name",
+      username: "some username",
+      encrypted_password: "some encrypted_password",
+    }
+    @update_attrs %{
+      name: "some updated name",
+      username: "some updated username",
+      encrypted_password: "some updated encrypted_password",
+    }
+    @invalid_attrs %{
+      name: nil,
+      username: nil,
+      encrypted_password: nil,
+    }
 
     def pharmacy_fixture(attrs \\ %{}) do
       {:ok, pharmacy} =

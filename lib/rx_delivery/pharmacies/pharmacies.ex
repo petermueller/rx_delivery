@@ -8,6 +8,11 @@ defmodule RxDelivery.Pharmacies do
 
   alias RxDelivery.Pharmacies.Pharmacy
 
+  def get_pharmacy_by_username(username) when is_nil(username), do: nil
+  def get_pharmacy_by_username(username) do
+    Repo.get_by(Pharmacy, username: username)
+  end
+
   @doc """
   Returns the list of pharmacies.
 
