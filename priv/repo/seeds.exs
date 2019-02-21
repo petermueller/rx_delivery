@@ -16,8 +16,8 @@ alias RxDelivery.Patients
 # Pharmacys with Locations
 pharmacies =
   [
-    %{name: "Alfa Pharmacy"},
-    %{name: "Bravo Pharmacy"},
+    %{name: "Alfa Pharmacy", username: "alfa", encrypted_password: "falfa"},
+    %{name: "Bravo Pharmacy", username: "bravo", encrypted_password: "encore"},
   ]
   |> Enum.map(&Pharmacies.create_pharmacy!/1)
 

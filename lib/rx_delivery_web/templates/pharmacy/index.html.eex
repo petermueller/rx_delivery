@@ -15,12 +15,8 @@
 
       <td>
         <%= link "Show", to: Routes.pharmacy_path(@conn, :show, pharmacy) %>
-        <%= link "Edit", to: Routes.pharmacy_path(@conn, :edit, pharmacy) %>
-        <%= link "Delete", to: Routes.pharmacy_path(@conn, :delete, pharmacy), method: :delete, data: [confirm: "Are you sure?"] %>
       </td>
     </tr>
 <% end %>
   </tbody>
 </table>
-
-<span><%= link "New Pharmacy", to: Routes.pharmacy_path(@conn, :new) %></span>

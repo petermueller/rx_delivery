@@ -16,6 +16,10 @@
 
 </ul>
 
-<span><%= link "Edit", to: Routes.pharmacy_location_path(@conn, :edit, @pharmacy) %></span>
-<span><%= link "Back", to: Routes.pharmacy_path(@conn, :show, @pharmacy) %></span>
-<span><%= link "Delete", to: Routes.pharmacy_location_path(@conn, :delete, @pharmacy), method: :delete %></span>
+<%= if Auth.current_pharmacy(@conn).id == @pharmacy.id do %>
+  <span><%= link "Edit", to: Routes.pharmacy_location_path(@conn, :edit, @pharmacy) %></span>
+  <span><%= link "Back", to: Routes.pharmacy_path(@conn, :show, @pharmacy) %></span>
+  <span><%= link "Delete", to: Routes.pharmacy_location_path(@conn, :delete, @pharmacy), method: :delete %></span>
+<% else %>
+  <span><%= link "Back", to: Routes.pharmacy_path(@conn, :show, @pharmacy) %></span>
+<% end %>

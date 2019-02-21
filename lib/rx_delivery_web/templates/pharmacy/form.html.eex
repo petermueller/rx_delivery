@@ -5,9 +5,17 @@
     </div>
   <% end %>
 
-  <%= label f, :name %>
+  <%= label f, :name, "Pharmacy Name" %>
   <%= text_input f, :name %>
   <%= error_tag f, :name %>
+
+  <%= label f, :username %>
+  <%= text_input f, :username %>
+  <%= error_tag f, :username %>
+
+  <%= label f, :password %>
+  <%= password_input f, :encrypted_password %>
+  <%= error_tag f, :encrypted_password %>
 
   <div>
     <%= submit "Save" %>

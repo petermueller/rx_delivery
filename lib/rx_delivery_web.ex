@@ -24,6 +24,7 @@ defmodule RxDeliveryWeb do
       import Plug.Conn
       import RxDeliveryWeb.Gettext
       alias RxDeliveryWeb.Router.Helpers, as: Routes
+      alias RxDeliveryWeb.Helpers.Auth
     end
   end
 
@@ -42,6 +43,7 @@ defmodule RxDeliveryWeb do
       import RxDeliveryWeb.ErrorHelpers
       import RxDeliveryWeb.Gettext
       alias RxDeliveryWeb.Router.Helpers, as: Routes
+      alias RxDeliveryWeb.Helpers.Auth
     end
   end
 

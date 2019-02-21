@@ -9,5 +9,4 @@
 
 </ul>
 
-<span><%= link "Edit", to: Routes.pharmacy_path(@conn, :edit, @pharmacy) %></span>
-<span><%= link "Back", to: Routes.pharmacy_path(@conn, :index) %></span>
+<span><%= link "<-- All Pharmacies", to: Routes.pharmacy_path(@conn, :index) %></span>

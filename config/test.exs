@@ -16,3 +16,5 @@ config :rx_delivery, RxDelivery.Repo,
   database: "rx_delivery_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
+
+config :bcrypt_elixir, :log_rounds, 4
