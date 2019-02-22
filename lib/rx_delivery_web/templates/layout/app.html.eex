@@ -24,6 +24,8 @@
       <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
       <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
       <%= if Auth.signed_in?(@conn) do %>
+        <%= new_order_link(@conn) %>
+        |
         <%= my_pharmacy_link(@conn) %>
         |
         <%= link("Sign Out", to: Routes.session_path(@conn, :delete), method: :delete) %>

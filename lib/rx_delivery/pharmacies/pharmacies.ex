@@ -29,6 +29,14 @@ defmodule RxDelivery.Pharmacies do
     Repo.all(pharmacies_with_assocs_query())
   end
 
+  def only_pharmacies_with_locations do
+    query =
+      from ph in Pharmacy,
+      join: loc in assoc(ph, :location),
+      preload: [:location]
+    Repo.all(query)
+  end
+
   @doc """
   Gets a single pharmacy.
 

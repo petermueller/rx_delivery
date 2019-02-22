@@ -13,7 +13,7 @@
   <%= select f, :prescription_id, format_list_for_select_tag(@prescriptions) %>
   <%= error_tag f, :prescription_id %>
 
-  <%= label f, :location_id %>
+  <%= label f, :location_id, "Pharmacies with Locations" %>
   <%= select f, :location_id, format_list_for_select_tag(@pharmacies) %>
   <%= error_tag f, :location_id %>
 

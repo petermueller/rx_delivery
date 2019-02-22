@@ -65,7 +65,7 @@ defmodule RxDeliveryWeb.OrderController do
       rest
       |> Keyword.put_new_lazy(:patients, &Patients.list_patients/0)
       |> Keyword.put_new_lazy(:prescriptions, &Prescriptions.list_prescriptions/0)
-      |> Keyword.put_new_lazy(:pharmacies, fn -> Pharmacies.list_pharmacies(with: :location) end)
+      |> Keyword.put_new_lazy(:pharmacies, fn -> Pharmacies.only_pharmacies_with_locations end)
 
     render(conn, action_or_template, rest)
   end
