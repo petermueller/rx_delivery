@@ -12,9 +12,9 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
 ## Questions
   * What was the hardest part of the implementation?
-    - Deciding between scope and timeline. There were some things I should've either shortened up the implementation of, or just straight up cut in the interest of time. I probably should've just removed the links to edit locations that weren't your own, and left the ability to do it on the back-end intact in the interest of just getting it completed sooner. I ultimately decided not to scope. Other choices I'm fine with though. I decided to not default location to the current logged-in pharmacy.
+    - Deciding between scope and timeline. There were some things I should've either shortened up the implementation of, or just straight up cut in the interest of time. I probably should've just removed the links to edit locations that weren't your own, and left the ability to do it on the back-end intact in the interest of just getting it completed sooner. Other choices I'm fine with though. I decided to not default the location of a new Order to the current logged-in pharmacy.
   * What would be your next task if you had more time?
-    - I would want to see the new Order functionality just default to using the logged in Pharmacy, and restrict editing to not allow editing of the location/pharmacy associated with the order. This would be followed by only showing orders associated with the current Pharmacy user. As part of testing those I'd probably make `RxDelivery.Fixtures` more simplistic. 
+    - I would want to see the new Order functionality just default to using the logged in Pharmacy for the location, and restrict editing to not allow editing of the location/pharmacy associated with the order. This would be followed by only showing orders associated with the current Pharmacy user. Along the way, as part of testing those, I'd probably make `RxDelivery.Fixtures` more simplistic. 
   * How could this project be more interesting?
     - Depending on desired outcome there are a couple things that could be changed.
     - Potential Desired Outcomes:
