@@ -1,7 +1,8 @@
 defmodule RxDelivery.Fixtures do
   alias RxDelivery.{Patients, Prescriptions, Pharmacies}
 
-  @location_attrs %{latitude: "some latitude", longitude: "some longitude"}
+
+  @location_attrs %{latitude: "34.0000", longitude: "45.1111"}
   @patient_attrs %{first_name: "Bob", last_name: "Dobbs"}
   @pharmacy_attrs %{
     name: "Butt Drugs, Inc.",

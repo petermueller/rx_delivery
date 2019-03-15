@@ -3,8 +3,8 @@ defmodule RxDelivery.Repo.Migrations.CreateLocations do
 
   def change do
     create table(:locations) do
-      add :latitude, :string
-      add :longitude, :string
+      add :latitude, :decimal
+      add :longitude, :decimal
       add :pharmacy_id, references(:pharmacies, on_delete: :restrict), null: false
 
       timestamps()

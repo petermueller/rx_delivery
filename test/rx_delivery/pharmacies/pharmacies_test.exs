@@ -78,9 +78,9 @@ defmodule RxDelivery.PharmaciesTest do
     alias RxDelivery.Pharmacies.Location
 
     @pharmacy_attrs %{name: "Butt Drugs, Inc."}
-    @valid_attrs %{latitude: "some latitude", longitude: "some longitude"}
-    @update_attrs %{latitude: "some updated latitude", longitude: "some updated longitude"}
-    @invalid_attrs %{latitude: nil, longitude: nil}
+    @valid_attrs %{latitude: "34.0000", longitude: "45.0000"}
+    @update_attrs %{latitude: "34.1111", longitude: "45.1111"}
+    @empty_attrs %{latitude: nil, longitude: nil}
 
     def location_fixture(attrs \\ %{}) do
       {:ok, location} =
@@ -108,15 +108,31 @@ defmodule RxDelivery.PharmaciesTest do
         @valid_attrs
         |> Map.put(:pharmacy_id, pharmacy.id)
         |> Pharmacies.create_location()
-      assert location.latitude == "some latitude"
-      assert location.longitude == "some longitude"
+      assert location.latitude == Decimal.new("34.0000")
+      assert location.longitude == Decimal.new("45.0000")
     end
 
-    test "create_location/1 with invalid data returns error changeset", %{pharmacy: pharmacy} do
+    test "create_location/1 with empty data returns error changeset", %{pharmacy: pharmacy} do
       assert {:error, %Ecto.Changeset{}} =
-        @invalid_attrs
+        @empty_attrs
         |> Map.put(:pharmacy_id, pharmacy.id)
         |> Pharmacies.create_location()
+    end
+
+    test "create_location/1 with different types of invalid data returns error changesets", %{pharmacy: pharmacy} do
+      invalid_attrs_list = [
+        %{latitude: "asdf", longitude: "qwer"},
+        %{latitude: true, longitude: false},
+        %{latitude: ["34.0000"], longitude: ["45.0000"]},
+        %{latitude: "", longitude: ""},
+      ]
+
+      Enum.each(invalid_attrs_list, fn(attrs) ->
+        assert {:error, %Ecto.Changeset{}} =
+          attrs
+          |> Map.put(:pharmacy_id, pharmacy.id)
+          |> Pharmacies.create_location()
+      end)
     end
 
     test "create_location/1 without a pharmacy_id returns error changeset" do
@@ -126,13 +142,13 @@ defmodule RxDelivery.PharmaciesTest do
     test "update_location/2 with valid data updates the location", %{pharmacy: pharmacy} do
       location = location_fixture(pharmacy_id: pharmacy.id)
       assert {:ok, %Location{} = location} = Pharmacies.update_location(location, @update_attrs)
-      assert location.latitude == "some updated latitude"
-      assert location.longitude == "some updated longitude"
+      assert location.latitude == Decimal.new("34.1111")
+      assert location.longitude == Decimal.new("45.1111")
     end
 
     test "update_location/2 with invalid data returns error changeset", %{pharmacy: pharmacy} do
       location = location_fixture(pharmacy_id: pharmacy.id)
-      assert {:error, %Ecto.Changeset{}} = Pharmacies.update_location(location, @invalid_attrs)
+      assert {:error, %Ecto.Changeset{}} = Pharmacies.update_location(location, @empty_attrs)
       assert location == Pharmacies.get_location!(location.id)
     end
 

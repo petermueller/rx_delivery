@@ -5,8 +5,8 @@ defmodule RxDelivery.Pharmacies.Location do
   alias RxDelivery.Pharmacies.Pharmacy
 
   schema "locations" do
-    field :latitude, :string
-    field :longitude, :string
+    field :latitude, :decimal
+    field :longitude, :decimal
     belongs_to(:pharmacy, Pharmacy)
 
     timestamps()
