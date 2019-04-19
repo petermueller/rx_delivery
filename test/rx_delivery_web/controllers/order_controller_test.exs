@@ -9,6 +9,8 @@ defmodule RxDeliveryWeb.OrderControllerTest do
     location_id:     10_000,
   }
 
+  @moduletag :authenticated_pharmacy
+
   def fixture(:order) do
     {:ok, order} = Patients.create_order(Fixtures.order_attrs())
     order
@@ -29,14 +31,26 @@ defmodule RxDeliveryWeb.OrderControllerTest do
       conn = get(conn, Routes.order_path(conn, :new))
       assert html_response(conn, 200) =~ "New Order"
     end
+
+    test "by an unauthenticated user redirects to sign-up" do
+      conn = get(conn, Routes.order_path(conn, :new))
+      assert redirected_to(conn) == Routes.registration_path(conn, :new)
+    end
   end
 
   describe "create order" do
-    test "redirects to show when data is valid", %{conn: conn} do
-      conn = post(conn, Routes.order_path(conn, :create), order: Fixtures.order_attrs())
+    test "creates an for the signed-in pharmacy and redirects to show when data is valid", %{conn: conn, pharmacy: pharmacy} do
+      form_attrs =
+        Fixtures.order_attrs()
+        |> Map.take([:patient_id, :prescription_id])
+      conn = post(conn, Routes.order_path(conn, :create), order: form_attrs)
 
       assert %{id: id} = redirected_params(conn)
       assert redirected_to(conn) == Routes.order_path(conn, :show, id)
+
+
+      pharmacy = Pharmacies.get_pharmacy!(pharmacy.id, with: :location)
+      assert %{location_id: pharmacy.location.id} == Patients.get_order!(id)
 
       conn = get(conn, Routes.order_path(conn, :show, id))
       assert html_response(conn, 200) =~ "Order Information"

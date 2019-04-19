@@ -4,6 +4,8 @@ defmodule RxDeliveryWeb.OrderController do
   alias RxDelivery.{Patients, Pharmacies, Prescriptions}
   alias RxDelivery.Patients.Order
 
+  plug :redirect_unauthenticated
+
   def index(conn, _params) do
     orders = Patients.list_orders(:with_assocs)
     render(conn, "index.html", orders: orders)
@@ -15,7 +17,10 @@ defmodule RxDeliveryWeb.OrderController do
   end
 
   def create(conn, %{"order" => order_params}) do
-    case Patients.create_order(order_params) do
+    order_params =
+      order_params
+      |> Map.put(:location_id, value)
+    case Patients.create_order() do
       {:ok, order} ->
         conn
         |> put_flash(:info, "Order created successfully.")
@@ -68,5 +73,14 @@ defmodule RxDeliveryWeb.OrderController do
       |> Keyword.put_new_lazy(:pharmacies, fn -> Pharmacies.only_pharmacies_with_locations end)
 
     render(conn, action_or_template, rest)
+  end
+
+  defp redirect_unauthenticated(conn, _) do
+    case Auth.signed_in?(conn) do
+      false ->
+        redirect(conn, to: Routes.registration_path(conn, :new))
+        |> halt()
+      _ -> conn
+    end
   end
 end

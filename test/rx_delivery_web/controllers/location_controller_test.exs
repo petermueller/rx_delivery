@@ -5,8 +5,8 @@ defmodule RxDeliveryWeb.LocationControllerTest do
 
   alias RxDelivery.Pharmacies
 
-  @create_attrs %{latitude: "some latitude", longitude: "some longitude"}
-  @update_attrs %{latitude: "some updated latitude", longitude: "some updated longitude"}
+  @create_attrs %{latitude: "34.0000", longitude: "45.0000"}
+  @update_attrs %{latitude: "34.1111", longitude: "45.1111"}
   @invalid_attrs %{latitude: nil, longitude: nil}
 
   @moduletag :authenticated_pharmacy
@@ -25,10 +25,9 @@ defmodule RxDeliveryWeb.LocationControllerTest do
   end
 
   describe "new location" do
-
     test "renders form", %{conn: conn, pharmacy: pharmacy} do
       conn = get(conn, Routes.pharmacy_location_path(conn, :new, pharmacy))
-      assert html_response(conn, 200) =~ "Add Location for Butt Drugs, Inc."
+      assert html_response(conn, 200) =~ "Add Location for " <> pharmacy.name
     end
   end
 
@@ -39,12 +38,12 @@ defmodule RxDeliveryWeb.LocationControllerTest do
       assert redirected_to(conn) == Routes.pharmacy_location_path(conn, :show, pharmacy)
 
       conn = get(conn, Routes.pharmacy_location_path(conn, :show, pharmacy))
-      assert html_response(conn, 200) =~ "some latitude"
+      assert html_response(conn, 200) =~ "34.0000"
     end
 
     test "renders errors when data is invalid", %{conn: conn, pharmacy: pharmacy} do
       conn = post(conn, Routes.pharmacy_location_path(conn, :create, pharmacy), location: @invalid_attrs)
-      assert html_response(conn, 200) =~ "Add Location for Butt Drugs, Inc."
+      assert html_response(conn, 200) =~ "Add Location for " <> pharmacy.name
     end
   end
 
@@ -74,7 +73,7 @@ defmodule RxDeliveryWeb.LocationControllerTest do
       assert redirected_to(conn) == Routes.pharmacy_location_path(conn, :show, pharmacy)
 
       conn = get(conn, Routes.pharmacy_location_path(conn, :show, pharmacy))
-      assert html_response(conn, 200) =~ "some updated latitude"
+      assert html_response(conn, 200) =~ "34.1111"
     end
 
     test "renders errors when data is invalid", %{conn: conn, pharmacy: pharmacy} do

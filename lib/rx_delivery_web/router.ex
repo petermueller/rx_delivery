@@ -26,7 +26,7 @@ defmodule RxDeliveryWeb.Router do
     post "/sign-in", SessionController, :create
     delete "/sign-out", SessionController, :delete
 
-    resources "/registrations", PharmacyController, only: [:new, :create]
+    resources "/registrations", PharmacyController, only: [:new, :create], as: :registration
     resources "/pharmacies", PharmacyController, only: [:index, :show] do
       resources "/location", LocationController, singleton: true
     end

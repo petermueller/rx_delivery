@@ -32,7 +32,7 @@
       <% else %>
         <%= link "Sign In", to: Routes.session_path(@conn, :new) %>
         |
-        <%= link "Sign Up", to: Routes.pharmacy_path(@conn, :new) %>
+        <%= link "Sign Up", to: Routes.registration_path(@conn, :new) %>
       <% end %>
       <%= render @view_module, @view_template, assigns %>
     </main>

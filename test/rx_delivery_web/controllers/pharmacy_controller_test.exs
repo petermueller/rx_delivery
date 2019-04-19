@@ -28,14 +28,14 @@ defmodule RxDeliveryWeb.PharmacyControllerTest do
 
   describe "new pharmacy" do
     test "renders form", %{conn: conn} do
-      conn = get(conn, Routes.pharmacy_path(conn, :new))
+      conn = get(conn, Routes.registration_path(conn, :new))
       assert html_response(conn, 200) =~ "Sign Up with your Pharmacy's Information"
     end
   end
 
   describe "create pharmacy" do
     test "redirects to show when data is valid", %{conn: conn} do
-      conn = post(conn, Routes.pharmacy_path(conn, :create), pharmacy: @create_attrs)
+      conn = post(conn, Routes.registration_path(conn, :create), pharmacy: @create_attrs)
 
       assert %{id: id} = redirected_params(conn)
       assert redirected_to(conn) == Routes.pharmacy_path(conn, :show, id)
@@ -45,7 +45,7 @@ defmodule RxDeliveryWeb.PharmacyControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
-      conn = post(conn, Routes.pharmacy_path(conn, :create), pharmacy: @invalid_attrs)
+      conn = post(conn, Routes.registration_path(conn, :create), pharmacy: @invalid_attrs)
       assert html_response(conn, 200) =~ "Sign Up with your Pharmacy's Information"
     end
   end

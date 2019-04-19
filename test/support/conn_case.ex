@@ -43,7 +43,12 @@ defmodule RxDeliveryWeb.ConnCase do
 
 
     {conn, pharmacy} = if tags[:authenticated_pharmacy] do
-      pharmacy = RxDelivery.Fixtures.pharmacy()
+      pharmacy = %{
+        name: "An Authed Pharmacy.",
+        username: "authed_pharmacy",
+        encrypted_password: "password!"
+      }
+      |> RxDelivery.Fixtures.pharmacy()
       conn =
         Phoenix.ConnTest.build_conn()
         |> Plug.Session.call(@signing_opts)
